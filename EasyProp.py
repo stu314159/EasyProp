@@ -163,7 +163,33 @@ class EasyProp(object):
         
         return value
         
+    def sV_p(self,P):
+        """
+        get entropy of saturated vapor as a function of pressure.
         
+        input:
+        p - pressure.  SI units: kPa; USCS units: psia
+        
+        output:
+        s - specific entropy.  SI units: kJ/kg*K; USCS units: BTU/lbm*R
+        """
+        
+        if self.ConvertUnits==False:
+            p*=1000.
+        else:
+            p = self.converter.P_toSI(p)*1000. 
+        
+        
+        value = CP.PropsSI('S','P',p,'Q',1.,self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value = value/1000.; #<- convert J/kg to kJ/kg
+        else:
+            value = self.converter.s_toUS(value/1000.)
+        
+        return value
+    
+    
     def h_Tx(self,T,x):
         """
         get enthalpy of saturated mixture as a function of temperature and quality
