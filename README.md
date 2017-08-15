@@ -6,7 +6,7 @@ transparently.
 
 This package depends on CoolProp Python wrapper and its dependencies.
 
-Install by: pip install CoolProp
+Install dependency CoolProp with: pip install CoolProp
 
 Of course, you can use CoolProp without this package.
 
