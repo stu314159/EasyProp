@@ -122,9 +122,9 @@ class EasyProp(object):
         """
         
         if self.ConvertUnits==False:
-            p*=1000.
+            p*=1000. # from kPa to Pa
         else:
-            p = self.converter.P_toSI(p)*1000. 
+            p = self.converter.P_toSI(p)*1000. # from psi to kPa to Pa
         
         
         value = CP.PropsSI('H','P',p,'Q',1.0,self.fluidName)
@@ -137,7 +137,7 @@ class EasyProp(object):
         return value
     
     
-    def sL_p(self,P):
+    def sL_p(self,p):
         """
         get entropy of saturated liquid as a function of pressure.
         
@@ -149,9 +149,9 @@ class EasyProp(object):
         """
         
         if self.ConvertUnits==False:
-            p*=1000.
+            p*=1000. # from kPa to Pa
         else:
-            p = self.converter.P_toSI(p)*1000. 
+            p = self.converter.P_toSI(p)*1000. # from psi to kPa to Pa
         
         
         value = CP.PropsSI('S','P',p,'Q',0,self.fluidName)
@@ -163,7 +163,7 @@ class EasyProp(object):
         
         return value
         
-    def sV_p(self,P):
+    def sV_p(self,p):
         """
         get entropy of saturated vapor as a function of pressure.
         
@@ -175,7 +175,7 @@ class EasyProp(object):
         """
         
         if self.ConvertUnits==False:
-            p*=1000.
+            p*=1000. # from kPa to Pa
         else:
             p = self.converter.P_toSI(p)*1000. 
         
@@ -247,18 +247,20 @@ class EasyProp(object):
     def h_ps(self,p,s):
         """
         return enthalpy as a function of pressure and entropy
+        s = kJ/kg*K or BTU/lbm
+        p = kPa or psi
         """
         if self.ConvertUnits==False:
-            p/=1000.  # from Pa to kPa
-            s/=1000. # from J/kg*K to kJ/kg*K
+            p*=1000.  # from kPa to Pa
+            s*=1000. # from kJ/kg*K to J/kg*K
         else:
-            p = self.converter.P_toSI(p)
-            s = self.converter.s_toSI(s)*1000.
+            p = self.converter.P_toSI(p)*1000. # from psi to kPa to Pa
+            s = self.converter.s_toSI(s)*1000. # from BTU/lbm to kJ/kg*K to J/kg*K
         
         value = CP.PropsSI('H','P',p,'S',s,self.fluidName)
         
         if self.ConvertUnits==False:
-            value/=1000.;
+            value/=1000.; # from J/kg to kJ/kg
         else:
             value = self.converter.e_toUS(value/1000.)
             
@@ -270,10 +272,10 @@ class EasyProp(object):
         """
         
         if self.ConvertUnits==False:
-            p/=1000.
-            T-=273.15
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
         else:
-            p = self.converter.P_toSI(p)
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
             T = self.converter.F_toK(T)
             
         value = CP.PropsSI('H','P',p,'T',T,self.fluidName)
@@ -291,10 +293,10 @@ class EasyProp(object):
         """
         
         if self.ConvertUnits==False:
-            p/=1000.
-            T-=273.15
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
         else:
-            p = self.converter.P_toSI(p)
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
             T = self.converter.F_toK(T)
             
         value = CP.PropsSI('S','P',p,'T',T,self.fluidName)
