@@ -307,3 +307,23 @@ class EasyProp(object):
             value = self.converter.s_toUS(value/1000.)
             
         return value
+    
+    def T_ps(self,p,s):
+        """
+        return temperature as a function of pressure and entropy
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            s*=1000. # from kJ/kg*K to J/kg*K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            s = self.converter.s_toSI(s)*1000 # from BTU/lbm*R to kJ/kg*k to J/kg*k
+        
+        value = CP.PropsSI('T','P',p,'S',s,self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value -= 273.15 # K to C
+        else:
+            value = self.converter.K_toF(value)
+            
+        return value
