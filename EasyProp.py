@@ -327,3 +327,23 @@ class EasyProp(object):
             value = self.converter.K_toF(value)
             
         return value
+    
+    def T_ph(self,p,h):
+        """
+        return temperature as a function of pressure and enthalpy
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            h*=1000. # from kJ/kg to J/kg
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            h = self.converter.e_toSI(h)*1000 # from BTU/lbm to kJ/kg to J/kg
+        
+        value = CP.PropsSI('T','P',p,'H',h,self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value -= 273.15 # K to C
+        else:
+            value = self.converter.K_toF(value)
+            
+        return value
