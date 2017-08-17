@@ -1,17 +1,16 @@
 # EasyProp
 a simplified inferface to the CoolProp Python Wrapper 
 
-This interface also provides for using SI (C,kJ/kg,kPa,etc..) or USCS (psia, F, BTU/lbm, etc...)
-transparently.
+This interface extends the CoolProp Python wrapper in that two unit systems are allowed:
+1. SI (C,kJ/kg,kPa,etc..); or
+2. USCS (psia, F, BTU/lbm, etc...)
 
-This package depends on CoolProp Python wrapper and its dependencies.
+This package explicitly depends upon the CoolProp Python wrapper.  This dependency can be installed
+with the following command: pip install CoolProp
 
-Install dependency CoolProp with: pip install CoolProp
+EasyProp also presents a somewhat cleaner function calling syntax relative to CoolProp, however this admittedly
+comes at the expense of incomplete functionality.  If there is something missing, however, it is quite 
+straight-forward to add it.
 
-Of course, you can use CoolProp without this package.
-
-The intent is to use this package with optional access through MATLAB.  The resulting
-interface will provide fluid properties with a callin syntax similar to what you would find
-in some other MATLAB fluid property libraries like XSteam.  Use of this
-package will allow similar functionality but brings with it the broad range of fluid
-properties provided by CoolProp.
+Some example scripts are provided to illustrate how to use EasyProp for solving typical problems
+in thermodynamic cycle analysis.  
