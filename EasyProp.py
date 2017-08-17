@@ -452,4 +452,39 @@ class EasyProp(object):
             
         
         return (1./value)
+    
+    def v_Tx(self,T,x):
+        """
+        return specific volume as a function of temperature and quality
+        """
         
+        if self.ConvertUnits==False:
+            T-=273.15 # C to K
+        else:
+            T = self.converter.F_toK(T)
+        
+        value = CP.PropsSI('D','T',T,'Q',x,self.fluidName)
+        
+        if self.ConvertUnits==True:
+            value = self.converter.rho_toUS(value)
+                    
+        return (1./value)
+    
+    def v_pT(self,p,T):
+        """
+        return specific volume as a function of pressure and temperature
+        """
+        
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        value = CP.PropsSI('D','P',p,'T',T,self.fluidName)
+        
+        if self.ConvertUnits==True:
+            value = self.converter.rho_toUS(value)
+                
+        return (1./value)   
