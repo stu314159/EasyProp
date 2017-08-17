@@ -328,6 +328,45 @@ class EasyProp(object):
             
         return value
     
+    def Tsat_p(self,p):
+        """
+        return saturation temperature as a function of pressure
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            
+        
+        value = CP.PropsSI('T','P',p,'Q',0.5,self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value -= 273.15 # K to C
+        else:
+            value = self.converter.K_toF(value)
+            
+        return value
+    
+    
+    def Psat_T(self,T):
+        """
+        return saturation pressure as a function of temperature
+        """
+        
+        if self.ConvertUnits==False:
+            T-=273.15 # convert C to K
+        else:
+            T = self.converter.F_toK(T)
+            
+        value = CP.PropsSI('P','T',T,'Q',0.5,self.fluidName);
+        
+        if self.ConvertUnits==False:
+            value/=1000. # from Pa to kPa
+        else:
+            value = self.converter.P_toUS(value/1000.); # Pa to kPa to psi
+            
+        return value
+    
     def T_ph(self,p,h):
         """
         return temperature as a function of pressure and enthalpy
