@@ -72,6 +72,18 @@ class PropertyConverter(object):
         to BTU/lbm*R
         """
         return s_SI/self.s_fact;
+    
+    def rho_toUS(self,rho_SI):
+        """
+        convert kg/m^3 to lbm/ft^3
+        """
+        return rho_SI/self.rho_fact;
+    
+    def rho_toSI(self,rho_US):
+        """
+        convert lbm/ft^3 to kg/m^3
+        """
+        return rho_US*self.rho_fact;
 
 
 class EasyProp(object):
@@ -421,3 +433,23 @@ class EasyProp(object):
         value = CP.PropsSI('Q','P',p,'H',h,self.fluidName)
         
         return value
+    
+    def v_ph(self,p,h):
+        """
+        return specific volume as a function of pressure and enthalpy
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            h*=1000. # from kJ/kg to J/kg
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            h = self.converter.e_toSI(h)*1000 # from BTU/lbm to kJ/kg to J/kg
+        
+        value = CP.PropsSI('D','P',p,'H',h,self.fluidName)
+        
+        if self.ConvertUnits==True:
+            value = self.converter.rho_toUS(value)
+            
+        
+        return (1./value)
+        
