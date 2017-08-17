@@ -367,3 +367,18 @@ class EasyProp(object):
             value = self.converter.s_toUS(value/1000.) # J/kg*K to kJ/kg*K to BTU/lbm*R
             
         return value
+    
+    def x_ph(self,p,h):
+        """
+        return quality as a function of pressure and enthalpy
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            h*=1000. # from kJ/kg to J/kg
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            h = self.converter.e_toSI(h)*1000 # from BTU/lbm to kJ/kg to J/kg
+        
+        value = CP.PropsSI('Q','P',p,'H',h,self.fluidName)
+        
+        return value
