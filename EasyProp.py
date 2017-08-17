@@ -64,7 +64,7 @@ class PropertyConverter(object):
         """
         convert specific entropy term in BTU/lbm*R to kJ/kg*K
         """
-        return e_US*self.s_fact;
+        return s_US*self.s_fact;
     
     def s_toUS(self,s_SI):
         """
