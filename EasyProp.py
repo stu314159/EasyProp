@@ -20,6 +20,14 @@ class PropertyConverter(object):
         self.s_fact =  4.1868; # 1 BTU/lbm*R = 4.1868 kJ/kg*K
         self.c_fact = self.s_fact; # why not have two names?
         self.rho_fact = 16.0185; # 1 lbm/ft^3 = 16.0185 kg/m^3
+        
+        self.mu_fact = 0.671969; # 1 kg/m-s = 0.671969 lbm/ft-s
+        
+    def mu_toUS(self,mu_SI):
+        """
+        convert viscosity to US units
+        """
+        return (mu_SI*self.mu_fact);
     
     def F_toK(self,T_F):
         """
@@ -518,4 +526,23 @@ class EasyProp(object):
             # gas applications.  
         
         
+        return value
+    
+    def mu_pT(self,p,T):
+        """
+        return the viscosity (Pa-s, kg/m-s  or lbm/ft-s)
+        """
+        
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        value = CP.PropsSI('V','P',p,'T',T,self.fluidName) # kg/m-s
+        
+        if self.ConvertUnits==True:
+            value = self.converter.mu_toUS(value)
+            
         return value
