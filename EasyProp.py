@@ -21,7 +21,7 @@ class PropertyConverter(object):
         self.c_fact = self.s_fact; # why not have two names?
         self.rho_fact = 16.0185; # 1 lbm/ft^3 = 16.0185 kg/m^3
         
-        self.mu_fact = 0.671969; # 1 kg/m-s = 0.671969 lbm/ft-s
+        self.mu_fact = 0.020885434224573; # 1 N-s/m^2 = 0.02088... lbf-s/ft^2
         
     def mu_toUS(self,mu_SI):
         """
