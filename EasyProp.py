@@ -84,6 +84,8 @@ class PropertyConverter(object):
         convert lbm/ft^3 to kg/m^3
         """
         return rho_US*self.rho_fact;
+    
+    
 
 
 class EasyProp(object):
@@ -487,4 +489,33 @@ class EasyProp(object):
         if self.ConvertUnits==True:
             value = self.converter.rho_toUS(value)
                 
-        return (1./value)   
+        return (1./value)
+    
+    def R_pT(self,p,T):
+        """
+        return Ideal Gas constant as a function of pressure and temperature
+        
+        """
+        
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        R_bar = CP.PropsSI('GAS_CONSTANT','P',p,'T',T,self.fluidName) # J/mol-K
+        M_bar = CP.PropsSI('M','P',p,'T',T,self.fluidName) # kg/mol
+        
+        value = R_bar/M_bar # J/kg-K
+        value /=1000. #kJ/kg-K
+        
+        if self.ConvertUnits==False:
+            pass
+        else:
+            value = self.converter.s_toUS(value) # note this is now BTU/lbm-R
+            # not ft-lbf/lbm*R as may be desired for some ideal
+            # gas applications.  
+        
+        
+        return value
