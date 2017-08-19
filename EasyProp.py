@@ -546,3 +546,19 @@ class EasyProp(object):
             value = self.converter.mu_toUS(value)
             
         return value
+    
+    def Prandtl_pT(self,p,T):
+        """
+        return Prandtl number as a function of pressure and temperature
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        value = CP.PropsSI('PRANDTL','P',p,'T',T,self.fluidName) # no units
+        
+        return value
+        
