@@ -499,6 +499,28 @@ class EasyProp(object):
                 
         return (1./value)
     
+    def P_vT(self,v,T):
+        """
+        return pressure as a function of specific volume and Temperature
+        """
+        rho = 1./v # kg/m^3
+        if self.ConvertUnits==False:
+            T+=273.15 # from C to K
+        else:
+            T = self.converter.F_toK(T)
+            rho = self.converter.rho_toSI(rho) # lbm/ft^3 to kg/m^3
+            
+        value = CP.PropsSI('P','D',rho,'T',T,self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value/=1000. # from Pa to kPa
+        else:
+            value /=1000.
+            value = self.converter.P_toUS(value)
+            
+        return value
+            
+    
     def R_pT(self,p,T):
         """
         return Ideal Gas constant as a function of pressure and temperature
