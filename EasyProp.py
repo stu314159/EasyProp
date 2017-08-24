@@ -230,6 +230,29 @@ class EasyProp(object):
         
         return value
     
+    def h_px(self,P,x):
+        """
+        get enthalpy of a saturated mixture as a function of pressure and quality
+        
+        implement in terms of previously existing functions.
+        """
+        
+        T = self.Tsat_p(P);
+        h = self.h_Tx(T,x);
+        
+        return h
+    
+    def s_px(self,P,x):
+        """
+        get entropy of a saturated mixture as a function of pressure and quality
+        
+        implement in terms of previously existing functions.
+        """
+        T = self.Tsat_p(P);
+        s = self.s_Tx(T,x);
+        
+        return s
+    
     def u_Tx(self,T,x):
         """
         get internal energy of saturated mixture as a function of temperature and quality
