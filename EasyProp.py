@@ -563,7 +563,34 @@ class EasyProp(object):
             
         return value
             
+    def P_crit(self):
+        """
+        return critical pressure of the fluid
+        """
+        pC = CP.PropsSI('PCRIT',self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value = pC/1000. # convert Pa to kPa
+        else:
+            value = self.converter.P_toUS(pC/1000.)
+            
+        return value
     
+    def T_crit(self):
+        """
+        return critical temperature of the fluid
+        """
+        
+        cT = CP.PropsSI('TCRIT',self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value = cT-273.15; # convert K to C
+        else:
+            value = self.converter.K_toF(cT)
+            
+        return value
+    
+        
     def R_pT(self,p,T):
         """
         return Ideal Gas constant as a function of pressure and temperature
