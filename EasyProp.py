@@ -653,4 +653,13 @@ class EasyProp(object):
         value = CP.PropsSI('PRANDTL','P',p,'T',T,self.fluidName) # no units
         
         return value
-        
+       
+class simpleFluid(EasyProp):
+    """
+    A new class inheriting EasyProp.  Partly to give a more logical class name, partly to
+    make things less confusing when a simpleMixture class is added.
+    
+    """
+    
+    def __init__(self,fluidName,unitSystem):
+        EasyProp.__init__(self,fluidName,unitSystem);
