@@ -663,3 +663,40 @@ class simpleFluid(EasyProp):
     
     def __init__(self,fluidName,unitSystem):
         EasyProp.__init__(self,fluidName,unitSystem);
+ 
+class fluidSpecies(object):
+    """
+    
+    """
+    def __init__(self,fluidName,unitSystem,weight):
+        self.fluidName = fluidName
+        self.unitSystem = unitSystem
+        self.weight = weight
+        
+        self.fluid = simpleFluid(fluidName,unitSystem)
+    
+class simpleMixture(object):
+    """
+    A class to provide mass- or molar-weighted mixtures of fluids.  
+    """
+    def __init__(self,mixtureDict={'Water':1.0},weighting='w/o',units='SI'):
+        """
+        constructor:
+        mixtureDict = dictionary containing the mixture fluid names and percent weighting
+         -- initially only implement w/o; add a/o later.
+         weighting = 'w/o' - weight percent; 'a/o' atom percent
+         units = 'SI' | 'USCS'
+        """
+        self.mixtureDict = mixtureDict;
+        self.weighting = weighting;
+        self.units = 'SI'
+        self.fluidDict = {}
+        mixIndex = 0
+        for species in mixtureDict.keys():
+            self.fluidDict[mixIndex] = fluidSpecies(species,units,mixtureDict[species])
+            mixIndex+=1
+        
+    def get_components(self):
+        return self.fluidDict;
+        
+        
