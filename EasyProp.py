@@ -699,4 +699,67 @@ class simpleMixture(object):
     def get_components(self):
         return self.fluidDict;
         
+    
+class Sodium(object):
+    """
+    approximation to thermophysical properties of liquid and
+    vapor sodium
+    
+    """
+    def __init__(self, unitSystem = 'SI'):
         
+        self.unitSystem = unitSystem
+        self.Tcrit = 2503.7 # K - critical temperature
+        
+    def hL_T(self,T):
+        """
+        enthalpy of saturated liquid sodium as a function of temp
+        basic function returns kJ/kg
+        """
+        if ((T >= 371.) and (T < 2000.)):
+            h = -365.77 + 1.6582*T - 4.2398e-4*T**2 \
+            + 1.4847e-7*T**3 + 2992.6*T**(-1)
+        
+        if ((T>=2000.) and (T<= 2503.7)):
+            hAVG = self.hAVG_T(T);
+            dH = self.dH_g(T);
+            h = hAVG - dH/2.
+        
+        return h
+    
+    def dH_g(self,T):
+        """
+        enthalpy of vaporization as a function of T
+        """
+        val = 393.37*(1. - T/self.Tcrit) + \
+          4398.6*(1 - T/self.Tcrit)**(0.29302)
+        
+        return val
+        
+    def hV_T(self,T):
+        """
+        enthalpy of saturated vapor sodium as a function
+        of temperature
+        """
+        if ((T>=371.) and (T< 2000.)):
+            hL = self.hL_T(T);
+            dH = self.dH_g(T);
+            h = hL + dH;
+        
+        if ((T >= 2000.) and (T<=2503.7)):
+            hAVG = self.hAVG_T(T)
+            dH = self.dH_g(T)
+            h = hAVG + dH/2.
+            
+        
+        return h
+    
+    def hAVG_T(self,T):
+        """
+        for 2000 < T < 2503.7 this relation must be used
+        along with hV_T to get hL_T
+        """
+        
+        val = 2128.4 + 0.86496*T
+        
+        return val
