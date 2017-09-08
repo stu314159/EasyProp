@@ -11,6 +11,7 @@ b) callable from a MATLAB environment with a more "MATLAB-ish" syntax.
 """
 
 import CoolProp.CoolProp as CP
+import math
 
 
 class PropertyConverter(object):
@@ -706,16 +707,80 @@ class Sodium(object):
     vapor sodium
     
     """
-    def __init__(self, unitSystem = 'SI'):
+    def __init__(self, UnitSystem = 'SI'):
         
-        self.unitSystem = unitSystem
+        self.UnitSystem = UnitSystem
         self.Tcrit = 2503.7 # K - critical temperature
         
+        if UnitSystem=='SI': 
+            self.ConvertUnits=False;
+        else:
+            self.ConvertUnits=True;
+            
+        self.converter = PropertyConverter();
+        
+        
+    def P_vapor(self,T):
+        """
+        calculate vapor pressure as a function of T
+        
+        form given provides vapor pressure (MPa) vs Temp (K) -- convert as appropriate
+        
+        """
+        if self.ConvertUnits==False:
+            T+=273.5
+        else:
+            T = self.converter.F_toK(T)
+            
+        a = 11.9463
+        b = -12633.7
+        c = -0.4672
+        
+        P = math.exp(a + b/T + c * math.log(T))
+        
+        P*=1000.; # convert MPa to kPa
+        
+        if self.ConvertUnits==True:
+            P = self.converter.P_toUS(P)
+            
+        return P
+            
+    def rho_T(self,T):
+        """
+        liquid density as a unction of T
+        
+        """
+        if self.ConvertUnits==False:
+            T+=273.15
+        else:
+            T = self.converter.F_toK()
+        
+        rho_c = 219.
+        f = 275.32
+        g = 511.58
+        h = 0.5
+        
+        rho = rho_c+f*(1. - T/self.Tcrit) + g*(1. - T/self.Tcrit)**h
+        # now in kg/m**3
+        
+        if self.ConvertUnits==True:
+            rho = self.converter.rho_toUS(rho)
+            
+        return rho
+        
+        
+            
     def hL_T(self,T):
         """
         enthalpy of saturated liquid sodium as a function of temp
         basic function returns kJ/kg
         """
+        if self.ConvertUnits==False: # using SI units
+            T += 273.15 # convert C to K
+        else:
+            T = self.converter.F_toK(T) # convert F to K...of course
+        
+        
         if ((T >= 371.) and (T < 2000.)):
             h = -365.77 + 1.6582*T - 4.2398e-4*T**2 \
             + 1.4847e-7*T**3 + 2992.6*T**(-1)
@@ -724,6 +789,9 @@ class Sodium(object):
             hAVG = self.hAVG_T(T);
             dH = self.dH_g(T);
             h = hAVG - dH/2.
+            
+        if self.ConvertUnits==True:
+            h = self.converter.e_toUS(h)
         
         return h
     
@@ -731,8 +799,18 @@ class Sodium(object):
         """
         enthalpy of vaporization as a function of T
         """
+        
+        if self.ConvertUnits==False: # using SI units
+            T += 273.15 # convert C to K
+        else:
+            T = self.converter.F_toK(T) # convert F to K...of course
+            
+            
         val = 393.37*(1. - T/self.Tcrit) + \
           4398.6*(1 - T/self.Tcrit)**(0.29302)
+        
+        if self.ConvertUnits==True:
+            val = self.converter.e_toUS(val)
         
         return val
         
@@ -741,6 +819,13 @@ class Sodium(object):
         enthalpy of saturated vapor sodium as a function
         of temperature
         """
+        
+        if self.ConvertUnits==False: # using SI units
+            T += 273.15 # convert C to K
+        else:
+            T = self.converter.F_toK(T) # convert F to K...of course
+            
+            
         if ((T>=371.) and (T< 2000.)):
             hL = self.hL_T(T);
             dH = self.dH_g(T);
@@ -750,7 +835,9 @@ class Sodium(object):
             hAVG = self.hAVG_T(T)
             dH = self.dH_g(T)
             h = hAVG + dH/2.
-            
+          
+        if self.ConvertUnits==True:
+            h = self.converter.e_toUS(h)  
         
         return h
     
