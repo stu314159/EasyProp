@@ -661,7 +661,16 @@ class EasyProp(object):
             
         return value   
     
-    
+    def k_pT(self,p,T):
+        """
+        return thermal conductivity (kW/m-K) or BTU/ft-sec-R
+        """
+                   
+        value = (self.Cp_pT(p,T)*self.mu_pT(p,T))/self.Prandtl_pT(p,T)
+        
+        return value
+        
+        
     def Prandtl_pT(self,p,T):
         """
         return Prandtl number as a function of pressure and temperature
