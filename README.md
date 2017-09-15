@@ -5,6 +5,10 @@ This interface extends the CoolProp Python wrapper in that two unit systems are 
 1. SI (C,kJ/kg,kPa,etc..); or
 2. USCS (psia, F, BTU/lbm, etc...)
 
+
+CoolProp is also extended in that functionality is provided to model simple (non-interacting) mixtures
+(using either a/o or w/o).
+
 This package explicitly depends upon the CoolProp Python wrapper.  This dependency can be installed
 with the following command: pip install CoolProp
 
