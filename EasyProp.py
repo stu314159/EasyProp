@@ -94,6 +94,19 @@ class PropertyConverter(object):
         """
         return rho_US*self.rho_fact;
     
+    def kg_toLBM(self,kg):
+        """
+        
+        """
+        return kg*2.20462
+    
+    def lbm_toKG(self,lbm):
+        """
+        
+        """
+        
+        return lbm*0.453592
+    
     
 
 
@@ -685,6 +698,20 @@ class EasyProp(object):
         value = CP.PropsSI('PRANDTL','P',p,'T',T,self.fluidName) # no units
         
         return value
+    
+    def M(self):
+        """
+        return molar mass (kg/mol or lbm/mol) 
+        """
+        
+            
+        value = 1000.*CP.PropsSI('M',self.fluidName) # kg/mol
+        
+        if self.ConvertUnits==True:
+            value = self.converter.kg_toLBM(value) # kg/kmol to lbm/kmol
+            
+        return value
+        
        
 class simpleFluid(EasyProp):
     """
@@ -721,14 +748,39 @@ class simpleMixture(object):
         """
         self.mixtureDict = mixtureDict;
         
-        # to do: ensure the weights in mixtureDict are normalized to 1.0
+        # ensure the weights in mixtureDict are normalized to 1.0
+        cumWeight = 0.
+        for key in mixtureDict.keys():
+            cumWeight+=mixtureDict[key]
+        
+        # now, normalize all keys by the cumulative mixture weight
+        for key in mixtureDict.keys():
+            mixtureDict[key]/=cumWeight         
+        
         self.weighting = weighting;
-        self.units = 'SI'
+        
+        
+        self.units = units
         self.fluidDict = {}
         mixIndex = 0
         for species in mixtureDict.keys():
             self.fluidDict[mixIndex] = fluidSpecies(species,units,mixtureDict[species])
             mixIndex+=1
+            
+        # if weighting is 'a/o', convert to 'w/o'
+        if self.weighting == 'a/o':
+            # compute total molar weight
+            totalMolarWeight = 0.
+            for i in range(len(mixtureDict.keys())):
+                totalMolarWeight+=self.fluidDict[i].fluid.M()*self.fluidDict[i].weight
+            
+            # now, update each species weight
+            for i in range(len(mixtureDict.keys())):
+                M = self.fluidDict[i].fluid.M() # molar weight for species i
+                self.fluidDict[i].weight*=(M/totalMolarWeight);
+            
+        # done re-weighting 
+            
         
     def get_components(self):
         return self.fluidDict;
@@ -745,6 +797,17 @@ class simpleMixture(object):
             value += self.fluidDict[i].fluid.Cp_pT(p,T)*self.fluidDict[i].weight
         
         return value
+    
+    def M(self, ):
+        """
+        
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.M()*self.fluidDict[i].weight
+        
+        return value
+    
         
     def k_pT(self,p,T):
         """
