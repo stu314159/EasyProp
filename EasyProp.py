@@ -640,6 +640,28 @@ class EasyProp(object):
             
         return value
     
+    def Cp_pT(self,p,T ):
+        """
+         return the specific heat (kJ/kg-K, or BTU/lbm-R)
+         of the fluid
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        value = CP.PropsSI('C','P',p,'T',T,self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value/=1000.
+        else:
+            value = self.converter.s_toUS(value/1000.)
+            
+        return value   
+    
+    
     def Prandtl_pT(self,p,T):
         """
         return Prandtl number as a function of pressure and temperature
