@@ -731,6 +731,40 @@ class simpleMixture(object):
     def get_components(self):
         return self.fluidDict;
         
+        
+    def Cp_pT(self,p,T):
+        """
+        return the weighted-average specific heat at constant pressure
+        kJ/kg-K or BTU/lbm-R
+        
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.Cp_pT(p,T)*self.fluidDict[i].weight
+        
+        return value
+        
+    def k_pT(self,p,T):
+        """
+        return mixture thermal conductivity
+        
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.k_pT(p,T)*self.fluidDict[i].weight
+        
+        return value
+    
+    def Prandtl_pT(self,p,T):
+        """
+        return mixture Prandtl number
+        """
+        
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.Prandtl_pT(p,T)*self.fluidDict[i].weight
+        
+        return value
     
 class Sodium(object):
     """
