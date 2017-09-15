@@ -720,6 +720,8 @@ class simpleMixture(object):
          units = 'SI' | 'USCS'
         """
         self.mixtureDict = mixtureDict;
+        
+        # to do: ensure the weights in mixtureDict are normalized to 1.0
         self.weighting = weighting;
         self.units = 'SI'
         self.fluidDict = {}
@@ -755,6 +757,16 @@ class simpleMixture(object):
         
         return value
     
+    def mu_pT(self,p,T):
+        """
+        viscosity as a function of pressure and temperature
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.mu_pT(p,T)*self.fluidDict[i].weight
+        
+        return value
+    
     def Prandtl_pT(self,p,T):
         """
         return mixture Prandtl number
@@ -765,6 +777,70 @@ class simpleMixture(object):
             value += self.fluidDict[i].fluid.Prandtl_pT(p,T)*self.fluidDict[i].weight
         
         return value
+    
+    def h_pT(self,p,T):
+        """
+        return enthalpy as a function of pressure and temperature
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.h_pT(p,T)*self.fluidDict[i].weight
+        
+        return value
+    
+    def h_ps(self,p,s):
+        """
+        return enthalpy as a function of pressure and entropy
+        """
+        
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.h_ps(p,s)*self.fluidDict[i].weight
+        
+        return value
+    
+    def T_ps(self,p,s):
+        """
+        return temperature as a function of pressure and entropy
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.T_ps(p,s)*self.fluidDict[i].weight
+        
+        return value
+    
+    def T_pv(self,p,v):
+        """
+        return temperature as a function of pressure and specific volume
+        """
+        
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.T_pv(p,v)*self.fluidDict[i].weight
+        
+        return value
+    
+    def R_pT(self,p,T):
+        """
+        return ideal gas constant as a function of pressure and Temp
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.R_pT(p,T)*self.fluidDict[i].weight
+        
+        return value
+    
+    def s_ph(self,p,h):
+        """
+        return entropy as a function of pressure and enthalpy
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.s_ph(p,h)*self.fluidDict[i].weight
+        
+        return value
+    
+    
     
 class Sodium(object):
     """
