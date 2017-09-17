@@ -899,7 +899,22 @@ class EasyProp(object):
         else:
             value = self.converter.s_toUS(value/1000.)
             
-        return value   
+        return value
+    
+    def Cv_pT(self,p,T):
+        """
+        return the value of specific heat as a function of pressure and Temp.
+        Implement in terms of Cp_pT and R_pT
+        """
+        val = self.Cp_pT(p,T) - self.R_pT(p,T)
+        return val
+    
+    def gamma_pT(self,p,T):
+        """
+        return ratio of specific heats as a function of pressure and temperature
+        """
+        val = self.Cp_pT(p,T)/self.Cv_pT(p,T)
+        return val
     
     def k_pT(self,p,T):
         """
@@ -928,7 +943,7 @@ class EasyProp(object):
     
     def M(self):
         """
-        return molar mass (kg/mol or lbm/mol) 
+        return molar mass (kg/kmol or lbm/mol) 
         """
         
             
