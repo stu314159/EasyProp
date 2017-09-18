@@ -710,7 +710,7 @@ class EasyProp(object):
         """
         
         if self.ConvertUnits==False:
-            T-=273.15 # C to K
+            T+=273.15 # C to K
         else:
             T = self.converter.F_toK(T)
         
