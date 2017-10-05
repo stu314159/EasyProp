@@ -1199,7 +1199,15 @@ class simpleMixture(object):
         
         return value
     
-    
+    def v_pT(self,p,T):
+        """
+        return entropy as a function of pressure and enthalpy
+        """
+        value = 0.
+        for i in range(len(self.fluidDict.keys())):
+            value += self.fluidDict[i].fluid.v_pT(p,T)*self.fluidDict[i].weight
+        
+        return value
     
 class Sodium(object):
     """
