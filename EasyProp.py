@@ -895,7 +895,7 @@ class EasyProp(object):
         value = CP.PropsSI('C','P',p,'T',T,self.fluidName)
         
         if self.ConvertUnits==False:
-            value/=1000.
+            value/=1000. # from Pa to kPa
         else:
             value = self.converter.s_toUS(value/1000.)
             
