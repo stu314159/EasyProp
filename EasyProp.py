@@ -770,6 +770,7 @@ class EasyProp(object):
             T += 273.15; # from C to K
         else:
             s = self.converter.s_toSI(s)*1000. # BTU/lbm-R to kJ/kg-K to J/kg-K
+            T = self.converter.F_toK(T) # F to K
             
         value = CP.PropsSI('P','S',s,'T',T,self.fluidName) # get P in Pascal
         
