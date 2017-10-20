@@ -761,6 +761,26 @@ class EasyProp(object):
             
         return value
     
+    def P_sT(self,s,T):
+        """
+        return pressure as a function of entropy and temperature
+        """
+        if self.ConvertUnits==False:
+            s *= 1000. # kJ/kg-K --> J/kg-K
+            T += 273.15; # from C to K
+        else:
+            s = self.converter.s_toSI(s)*1000. # BTU/lbm-R to kJ/kg-K to J/kg-K
+            
+        value = CP.PropsSI('P','S',s,'T',T,self.fluidName) # get P in Pascal
+        
+        value/=1000. # Pa to kPa
+        if self.ConvertUnits==True:
+            value = self.converter.P_toUS(value)
+            
+        return value
+    
+    
+    
     def T_pv(self,p,v):
         """
         return temperature as a function of specific volume and pressure
