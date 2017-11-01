@@ -780,7 +780,26 @@ class EasyProp(object):
             
         return value
     
-    
+    def P_sh(self,s,h):
+        """
+        return pressure as a function of entropy and enthalpy
+        """
+        if self.ConvertUnits == True:
+            h = self.converter.e_toSI(h)
+            s = self.converter.s_toSI(s)
+        
+        # now both h and s are in SI units
+        s*=1000. # kJ/kg-K to J/kg-K
+        h*=1000. # kJ/kg - J/kg
+        
+        value = CP.PropsSI('P','S',s,'H',h,self.fluidName) # get P in Pa
+        
+        value/=1000.; # Pa to kPa
+        
+        if self.ConvertUnits == True:
+            value = self.converter.P_toUS(value)
+            
+        return value
     
     def T_pv(self,p,v):
         """
