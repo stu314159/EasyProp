@@ -475,6 +475,28 @@ class EasyProp(object):
             value = self.converter.e_toUS(value/1000.)
             
         return value
+    
+    def u_Tv(self,T,v):
+        """
+        return specific internal energy as a function of Temperature and
+        specific volume
+        """
+        rho = 1./v # mass/volume
+        
+        if self.ConvertUnits==False:
+            T+=273.15 # from C to K
+        else:
+            T = self.converter.F_toK(T) 
+            rho = self.converter.rho_toSI(rho) # lbm/ft^3 --> kg/m^3
+            
+        value = CP.PropsSI('U','T',T,'D',rho,self.fluidName)
+        
+        if self.ConvertUnits==False:
+            value/=1000. # J/kg - kJ/kg
+        else:
+            value = self.converter.e_toUS(value/1000.) # J/kg --> kJ/kg --> BTU/lbm
+            
+        return value
         
     def s_pT(self,p,T):
         """
@@ -1152,7 +1174,8 @@ class simpleMixture(object):
         """
         value = 0.
         for i in range(len(self.fluidDict.keys())):
-            value += self.fluidDict[i].fluid.h_pT(p,T)*self.fluidDict[i].weight
+            p_c = self.fluidDict[i].weight*p;
+            value += self.fluidDict[i].fluid.h_pT(p_c,T)*self.fluidDict[i].weight
         
         return value
     
@@ -1173,7 +1196,9 @@ class simpleMixture(object):
         
         value = 0.
         for i in range(len(self.fluidDict.keys())):
-            value += self.fluidDict[i].fluid.h_ps(p,s)*self.fluidDict[i].weight
+            s_c = self.fluidDict[i].weight*s;
+            p_c = self.fluidDict[i].weight*p;
+            value += self.fluidDict[i].fluid.h_ps(p_c,s_c)*self.fluidDict[i].weight
         
         return value
     
@@ -1235,7 +1260,8 @@ class simpleMixture(object):
         """
         value = 0.
         for i in range(len(self.fluidDict.keys())):
-            value += self.fluidDict[i].fluid.s_pT(p,T)*self.fluidDict[i].weight
+            p_c = self.fluidDict[i].weight*p;
+            value += self.fluidDict[i].fluid.s_pT(p_c,T)*self.fluidDict[i].weight
         
         return value
     
