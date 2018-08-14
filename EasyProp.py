@@ -13,6 +13,8 @@ b) callable from a MATLAB environment with a more "MATLAB-ish" syntax.
 import CoolProp.CoolProp as CP
 import math
 
+from CoolProp.HumidAirProp import HAPropsSI
+
 
 class PropertyConverter(object):
     def __init__(self):
@@ -107,7 +109,72 @@ class PropertyConverter(object):
         
         return lbm*0.453592
     
+class HumidAir(object):
+    def __init__(self,UnitSystem='SI'):
+        if UnitSystem=='SI':
+            self.ConvertUnits=False;
+        else:
+            self.ConvertUnits=True;
+            
+        self.converter = PropertyConverter();
+        
+    def w_PTR(self,p,T,R):
+        """
+        get humidity ratio as a function of temperature, pressure, and relative humidity
+        
+        input:
+        P - pressure.  SI units: kPa; USCS units psia
+        T - temperature. SI units: C; USCS units F
+        R - relative humidity (no units)
+        
+        output:
+        w - humidity ratio (no units)
+        
+        """
+        # get unit conversions sorted out.  P -> pascal; T -> kelvin
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        # call CoolProp function
+        value = HAPropsSI('W','T',T,'P',p,'R',R)
+        
+        return value
+        
     
+    def h_PTR(self,p,T,R):
+        """
+        get mixture enthalpy as a function of temperature, pressure and relative humidity
+        
+        input:
+        P - pressure.  SI units: kPa; USCS units psia
+        T - temperature. SI units: C; USCS units F
+        R - relative humidity (no units)
+        
+        output:
+        h - enthalpy.  SI units: kJ/kg; USCS units BTU/lbm
+        
+        """
+        # get unit conversions sorted out.  P -> pascal; T -> kelvin
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        # call CoolProp function
+        value = HAPropsSI('H','T',T,'P',p,'R',R)
+        # restore to required units
+        if self.ConvertUnits==False:
+            value/=1000.
+        else:
+            value = self.converter.e_toUS(value/1000.)
+            
+        return value
 
 
 class EasyProp(object):
