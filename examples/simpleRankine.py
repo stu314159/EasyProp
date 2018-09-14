@@ -24,7 +24,7 @@ sys.path.insert(0,'..') #<-- assumes EasyProp is one folder up
 
 import EasyProp as EP
 
-myFluid = EP.EasyProp('Water','SI')
+myFluid = EP.simpleFluid('Water','SI')
 numStatePoints = 4;
 eta_turbine = 0.88;
 eta_pump = 0.82;

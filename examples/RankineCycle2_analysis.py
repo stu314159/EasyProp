@@ -43,7 +43,7 @@ sys.path.insert(0,'..') #<-- assumes EasyProp is one folder up
 
 import EasyProp as EP
 
-myFluid = EP.EasyProp('Water','USCS')
+myFluid = EP.simpleFluid('Water','USCS')
 
 numStatePoints = 16+1;#<-- so state point arrays can be treated as 1-based.
 # need to decide how to treat the state point numbering hackery.
