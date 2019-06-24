@@ -55,7 +55,7 @@ normC = 1./physProp[0][0]; # so that normC*physProp = 1.0 for Hydrogen at 80 F
 
 physProp *= normC;
 
-print physProp
+print(physProp)
 
 
 

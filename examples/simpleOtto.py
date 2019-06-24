@@ -87,10 +87,10 @@ m_air = V/v[1]; # lbm, based on cylinder volume (ft**3) and initial air specific
 
 W_net = w_net*m_air
 
-print "T = ", T
-print "u = ", u
-print "v = ", v
-print "Net specific heat transferred = %g BTU/lbm"%q_net
-print "Net specific work = %g BTU/lbm"%w_net
-print "Net total work = %g BTU"%W_net
-print "Thermal efficiency = %g percent"%(eta_th*100.)
+print("T = ", T)
+print("u = ", u)
+print("v = ", v)
+print("Net specific heat transferred = %g BTU/lbm"%q_net)
+print("Net specific work = %g BTU/lbm"%w_net)
+print("Net total work = %g BTU"%W_net)
+print("Thermal efficiency = %g percent"%(eta_th*100.))

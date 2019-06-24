@@ -163,7 +163,7 @@ f =opt.broyden1(wrapped_function,[0.1,0.1])
 # f[0] corresponds to f1 on the given schematic
 # f[1] corresponds to f2 on the given schematic
 
-print "Flow fractions [f1,f2] = ",f
+print("Flow fractions [f1,f2] = ",f)
 
 # calculate specific work of the turbines and pumps
 
@@ -175,11 +175,11 @@ w_lpt = (1-f[0])*x[6]*(1-f[1])*(h[8] - h[9])
 w_net = w_mcp + w_mfp + w_hpt + w_lpt
 
 # report results
-print "MCP work = %g BTU/lbm"%w_mcp
-print "MFP work = %g BTU/lbm"%w_mfp
-print "HP Turbine work = %g BTU/lbm"%w_hpt
-print "LP Turbine work = %g BTU/lbm"%w_lpt
-print "Net work = %g BTU/lbm" %w_net
+print("MCP work = %g BTU/lbm"%w_mcp)
+print("MFP work = %g BTU/lbm"%w_mfp)
+print("HP Turbine work = %g BTU/lbm"%w_hpt)
+print("LP Turbine work = %g BTU/lbm"%w_lpt)
+print("Net work = %g BTU/lbm" %w_net)
 
 # net heat in the SG and condenser
 q_sg = h[5] - h[4]
@@ -187,13 +187,13 @@ q_cond = (1-f[0])*x[6]*(1-f[1])*(h[1]-h[9])
 
 q_net = q_sg + q_cond
 
-print "q in through SG = %g BTU/lbm"%q_sg
-print "q through Condenser = %g BTU/lbm"%q_cond
-print "Net heat = %g BTU/lbm"%q_net
+print("q in through SG = %g BTU/lbm"%q_sg)
+print("q through Condenser = %g BTU/lbm"%q_cond)
+print("Net heat = %g BTU/lbm"%q_net)
 
 # compute thermal efficiency
 eta_th = w_net / q_sg
-print "Cycle thermal efficiency = %5.2f percent."%(eta_th*100.)
+print("Cycle thermal efficiency = %5.2f percent."%(eta_th*100.))
 
 # to get flow rate through the steam system and condenser cooling system
 # get state point properties for sp 13-16
@@ -211,7 +211,7 @@ h[14] = myFluid.h_pT(P[14],T[14])
 # use primary/secondary energy balance for secondary flow rate
 m_dot_s = m_dot_p*(h[13] - h[14])/(h[5] - h[4])
 
-print "Mass flow rate of secondary = %g lbm/hr " % m_dot_s
+print("Mass flow rate of secondary = %g lbm/hr " % m_dot_s)
 
 # state point 15 - condenser cooling inlet
 P[15] = 14.7 # psia, given
@@ -226,4 +226,4 @@ h[16] = myFluid.h_pT(P[16],T[16])
 # use energy balance on the condenser to get flow rate
 m_dot_c = m_dot_s*(-1.*q_cond)/(h[16] - h[15])
 
-print "Mass flow rate of condenser cooling water = %g lbm/hr"%m_dot_c
+print("Mass flow rate of condenser cooling water = %g lbm/hr"%m_dot_c)
