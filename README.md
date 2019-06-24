@@ -18,3 +18,5 @@ straight-forward to add it.
 
 Some example scripts are provided to illustrate how to use EasyProp for solving typical problems
 in thermodynamic cycle analysis.  
+
+Requires Python 3 (tested with 3.6.7), numpy, scipy, and coolprop libraries --- all installable via, for example, conda.
