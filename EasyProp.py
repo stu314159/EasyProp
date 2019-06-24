@@ -419,23 +419,25 @@ class EasyProp(object):
         
         return s
     
-    def u_Tx(self,T,x):
-        """
-        get internal energy of saturated mixture as a function of temperature and quality
-        """
-        if self.ConvertUnits==False:
-            T += 273.15; # C to K
-        else:
-            T = self.converter.F_toK(T)
-            
-        value = CP.PropsSI('U','T',T,'Q',x,self.fluidName)
-        
-        if self.ConvertUnits==False:
-            value /= 1000.;
-        else:
-            value = self.converter.e_toUS(value/1000.)
-        
-        return value
+# =============================================================================
+#     def u_Tx(self,T,x):
+#         """
+#         get internal energy of saturated mixture as a function of temperature and quality
+#         """
+#         if self.ConvertUnits==False:
+#             T += 273.15; # C to K
+#         else:
+#             T = self.converter.F_toK(T)
+#             
+#         value = CP.PropsSI('U','T',T,'Q',x,self.fluidName)
+#         
+#         if self.ConvertUnits==False:
+#             value /= 1000.;
+#         else:
+#             value = self.converter.e_toUS(value/1000.)
+#         
+#         return value
+# =============================================================================
     
     def s_Tx(self,T,x):
         """
@@ -1142,11 +1144,11 @@ class simpleMixture(object):
         
         # ensure the weights in mixtureDict are normalized to 1.0
         cumWeight = 0.
-        for key in mixtureDict.keys():
+        for key in list(mixtureDict.keys()):
             cumWeight+=mixtureDict[key]
         
         # now, normalize all keys by the cumulative mixture weight
-        for key in mixtureDict.keys():
+        for key in list(mixtureDict.keys()):
             mixtureDict[key]/=cumWeight         
         
         self.weighting = weighting;
@@ -1155,7 +1157,7 @@ class simpleMixture(object):
         self.units = units
         self.fluidDict = {}
         mixIndex = 0
-        for species in mixtureDict.keys():
+        for species in list(mixtureDict.keys()):
             self.fluidDict[mixIndex] = fluidSpecies(species,units,mixtureDict[species])
             mixIndex+=1
             
@@ -1163,11 +1165,11 @@ class simpleMixture(object):
         if self.weighting == 'a/o':
             # compute total molar weight
             totalMolarWeight = 0.
-            for i in range(len(mixtureDict.keys())):
+            for i in range(len(list(mixtureDict.keys()))):
                 totalMolarWeight+=self.fluidDict[i].fluid.M()*self.fluidDict[i].weight
             
             # now, update each species weight
-            for i in range(len(mixtureDict.keys())):
+            for i in range(len(list(mixtureDict.keys()))):
                 M = self.fluidDict[i].fluid.M() # molar weight for species i
                 self.fluidDict[i].weight*=(M/totalMolarWeight);
             
@@ -1185,7 +1187,7 @@ class simpleMixture(object):
         
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.Cp_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1197,7 +1199,7 @@ class simpleMixture(object):
         
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.Cv_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1207,7 +1209,7 @@ class simpleMixture(object):
         
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.M()*self.fluidDict[i].weight
         
         return value
@@ -1219,7 +1221,7 @@ class simpleMixture(object):
         
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.k_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1230,7 +1232,7 @@ class simpleMixture(object):
         
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.gamma_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1240,7 +1242,7 @@ class simpleMixture(object):
         viscosity as a function of pressure and temperature
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.mu_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1251,7 +1253,7 @@ class simpleMixture(object):
         """
         
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.Prandtl_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1261,7 +1263,7 @@ class simpleMixture(object):
         return enthalpy as a function of pressure and temperature
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             p_c = self.fluidDict[i].weight*p;
             value += self.fluidDict[i].fluid.h_pT(p_c,T)*self.fluidDict[i].weight
         
@@ -1272,7 +1274,7 @@ class simpleMixture(object):
         return internal energy as a function of pressure and temperature
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.u_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1283,7 +1285,7 @@ class simpleMixture(object):
         """
         
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             s_c = self.fluidDict[i].weight*s;
             p_c = self.fluidDict[i].weight*p;
             value += self.fluidDict[i].fluid.h_ps(p_c,s_c)*self.fluidDict[i].weight
@@ -1296,7 +1298,7 @@ class simpleMixture(object):
         """
         
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.u_ps(p,s)*self.fluidDict[i].weight
         
         return value
@@ -1306,7 +1308,7 @@ class simpleMixture(object):
         return temperature as a function of pressure and entropy
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.T_ps(p,s)*self.fluidDict[i].weight
         
         return value
@@ -1317,7 +1319,7 @@ class simpleMixture(object):
         """
         
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.T_pv(p,v)*self.fluidDict[i].weight
         
         return value
@@ -1327,7 +1329,7 @@ class simpleMixture(object):
         return ideal gas constant as a function of pressure and Temp
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.R_pT(p,T)*self.fluidDict[i].weight
         
         return value
@@ -1337,7 +1339,7 @@ class simpleMixture(object):
         return entropy as a function of pressure and enthalpy
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.s_ph(p,h)*self.fluidDict[i].weight
         
         return value
@@ -1347,7 +1349,7 @@ class simpleMixture(object):
         return entropy as a function of pressure and enthalpy
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             p_c = self.fluidDict[i].weight*p;
             value += self.fluidDict[i].fluid.s_pT(p_c,T)*self.fluidDict[i].weight
         
@@ -1358,7 +1360,7 @@ class simpleMixture(object):
         return entropy as a function of pressure and enthalpy
         """
         value = 0.
-        for i in range(len(self.fluidDict.keys())):
+        for i in range(len(list(self.fluidDict.keys()))):
             value += self.fluidDict[i].fluid.v_pT(p,T)*self.fluidDict[i].weight
         
         return value
