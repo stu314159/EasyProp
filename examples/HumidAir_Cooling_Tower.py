@@ -66,8 +66,8 @@ print("W = ")
 print(W)
 
 m_dot_air = m_dot_water*(h[1]-h[0])/(ha[2]-ha[3]+(W[3]-W[2])*h[4]);
-print("air mass flow rate = %g kg/hr"%m_dot_air)
+print(("air mass flow rate = %g kg/hr"%m_dot_air))
 
 m_dot_makeup = m_dot_air*(W[3]-W[2])
-print("makeup water flow rate = %g kg/hr"%m_dot_makeupf)
+print(("makeup water flow rate = %g kg/hr"%m_dot_makeupf))
 

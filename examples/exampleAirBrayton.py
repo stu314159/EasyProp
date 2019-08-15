@@ -52,7 +52,7 @@ T[1] = myFluid.T_ph(P[1],h[1])
 
 w_comp = h[0] - h[1]
 
-print("Compressor specific work = %g kJ/kg"%w_comp)
+print(("Compressor specific work = %g kJ/kg"%w_comp))
 
 # skip to combustor outlet / turbine #1 inlet
 P[3] = 1000 #kPa (regeneration and combustion stages are assumed isobaric)
@@ -107,10 +107,10 @@ eta_th = w_net/(q_s+q_rh)
 
 # report the results:
 for i in range(numStatePoints):
-    print("T[%d] = %g C "%(i,T[i]))
+    print(("T[%d] = %g C "%(i,T[i])))
  
-print("Net specific heat transferred = %g kJ/kg"%q_net)
-print("Net specific work = %g kJ/kg"%w_net)
-print("Cycle Thermal Efficiency = %5.2f percent"%(eta_th*100.))
+print(("Net specific heat transferred = %g kJ/kg"%q_net))
+print(("Net specific work = %g kJ/kg"%w_net))
+print(("Cycle Thermal Efficiency = %5.2f percent"%(eta_th*100.)))
     
 

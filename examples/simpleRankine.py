@@ -72,8 +72,8 @@ w_net = w_pump + w_turbine;
 q_net = q_s + q_r;
 
 # check energy balance; w_net should equal q_net
-print "Net specific work = %g kJ/kg "%w_net
-print "Net specific heat = %g kJ/kg "%q_net
+print("Net specific work = %g kJ/kg "%w_net)
+print("Net specific heat = %g kJ/kg "%q_net)
 
 
 # answer some questions:
@@ -81,16 +81,16 @@ print "Net specific heat = %g kJ/kg "%q_net
 #a) net power produced = w_net*m_dot_stm
 net_power = w_net*m_dot_steam*(1./3600.) #(kW = kJ/s)
 
-print "Net power = %g kW"%net_power
+print("Net power = %g kW"%net_power)
 
 #b) net heat transfer rate into the boiler
 net_Qdot_supplied = q_s*m_dot_steam*(1./3600.) #kW =  kJ/s
 
-print "Net heat transfer rate into the boiler = %g kW"%net_Qdot_supplied
+print("Net heat transfer rate into the boiler = %g kW"%net_Qdot_supplied)
 
 #c) cycle thermal efficiency
 eta_th = w_net/q_s 
-print "Thermal Efficiency = %4.1f percent "%(eta_th*100.)
+print("Thermal Efficiency = %4.1f percent "%(eta_th*100.))
 
 #d) cooling water flow rate.
 
@@ -104,7 +104,7 @@ h_cond_out = myFluid.h_pT(Po,Tcond_out)
 # energy balance on condenser for cooling water flow rate
 m_dot_cool = m_dot_steam*(h[3]-h[0])/(h_cond_out - h_cond_in); #kg/h
 
-print "Condenser cooling water flow rate = %g kg/h"%m_dot_cool
+print("Condenser cooling water flow rate = %g kg/h"%m_dot_cool)
 
 
 
