@@ -197,6 +197,30 @@ class HumidAir(object):
             value = self.converter.K_toF(value)
             
         return value
+    
+    def v_PTR(self,p,T,R):
+        """
+        get mixture specific volume (per unit mass dry air) as a function of 
+        pressure, dry-bulb temperature and relative humidity
+        
+        """
+        # get unit conversions sorted out.  P -> pascal; T -> kelvin
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        # call CoolProp function
+        value = HAPropsSI('Vda','T',T,'P',p,'R',R)
+        
+        rho = 1./value;
+        if self.ConvertUnits==True:
+            rho = self.converter.rho_toUS(rho)
+            
+        
+        return (1./rho)
         
         
     
