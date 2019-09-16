@@ -221,6 +221,39 @@ class HumidAir(object):
             
         
         return (1./rho)
+    
+    def Pw_PTR(self,p,T,R):
+        """
+        get partial pressure of water vapor from Pressure, dry-bulb temp and
+        humidity ratio
+        
+        input:
+        P - pressure.  SI units: kPa; USCS units psia
+        T - temperature. SI units: C; USCS units F
+        R - relative humidity (no units)
+        
+        output:
+        Pw - humidity ratio . SI units: kPa; USCS units psia
+        
+        
+        """
+        # get unit conversions sorted out.  P -> pascal; T -> kelvin
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            T+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            T = self.converter.F_toK(T)
+            
+        # call CoolProp function
+        value = HAPropsSI('P_w','T',T,'P',p,'R',R)
+        
+        if self.ConvertUnits==False:
+            value/=1000. # from Pa to kPa
+        else:
+            value = self.converter.P_toUS(value/1000.); # Pa to kPa to psi
+            
+        return value
         
         
     
