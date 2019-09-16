@@ -166,6 +166,37 @@ class HumidAir(object):
         value = HAPropsSI('R','Tdb',Td,'Twb',Tw,'P',p)
         
         return value # no units; no need to convert
+    
+    def Tdew_PTdTw(self,p,Td,Tw):
+        """
+        get dew point temperature as a function of pressure, Td, and Tw
+         input:
+        P - pressure.  SI units: kPa; USCS units psia
+        Td - dry bulb temperature.  SI units: C; USCS units F
+        Tw - wet bulb temperature.  SI units: C; USCS units F
+        
+        output:
+        Tdew - dew point temperature, SI units: C; USCS units F
+        
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            Td+=273.15 # from C to K
+            Tw+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            Td = self.converter.F_toK(Td) 
+            Tw = self.converter.F_toK(Tw)
+            
+        value = HAPropsSI('Tdp','Tdb',Td,'Twb',Tw,'P',p)
+        
+        # convert output to C or F as appropriate
+        if self.ConvertUnits==False:
+            value -= 273.15 # K to C
+        else:
+            value = self.converter.K_toF(value)
+            
+        return value
         
         
     
