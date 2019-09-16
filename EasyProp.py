@@ -118,6 +118,33 @@ class HumidAir(object):
             
         self.converter = PropertyConverter();
         
+    
+    
+    def w_PTdTw(self,p,Td,Tw):
+        """
+        get humidity ratio as a function of pressure, Td, and Tw
+        
+        input
+        P - pressure.  SI units: kPa; USCS units psia
+        Td - dry bulb temperature.  SI units: C; USCS units F
+        Tw - wet bulb temperature.  SI units: C; USCS units F
+        
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            Td+=273.15 # from C to K
+            Tw+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            Td = self.converter.F_toK(Td) 
+            Tw = self.converter.F_toK(Tw)
+            
+        value = HAPropsSI('W','Tdb',Td,'Twb',Tw,'P',p)
+        
+        return value # no units; no need to convert
+        
+        
+    
     def w_PTR(self,p,T,R):
         """
         get humidity ratio as a function of temperature, pressure, and relative humidity
