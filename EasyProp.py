@@ -192,6 +192,61 @@ class HumidAir(object):
         
         return value
     
+    def R_PHW(self,p,h,W):
+        """
+        get relative humidity from Pressure, mixture enthalpy, and humidity ratio
+        
+        input:
+            P - pressure. [kPa/psia]
+            h - mixture enthalpy [ kJ/kg dry air | BTU/ lbm dry air]
+            w - humidity ratio
+            
+        output:
+            R - relative humidity
+        
+        """
+        
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            h*=1000. # from kJ/kg to J/kg
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            h = self.converter.e_toSI(h)*1000 # from BTU/lbm to kJ/kg to J/kg
+            
+        value = HAPropsSI('R','P',p,'H',h,'W',W);
+        
+        return value
+    
+    def Td_PHR(self,p,h,R):
+        """
+        get dry bulb temperature from Pressure, mixture enthalpy, and Rel Humidity
+        
+        input:
+            P - pressure [kPa/psia]
+            h - mixture enthalpy [ kJ/kg | BTU/lbm]
+            R - relative humidity
+            
+        output:
+            Td - dry bulb temperature [C | F]
+        
+        """
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            h*=1000. # from kJ/kg to J/kg
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            h = self.converter.e_toSI(h)*1000 # from BTU/lbm to kJ/kg to J/kg
+            
+        value = HAPropsSI('Tdb','P',p,'H',h,'R',R);
+        
+        # convert output to C or F as appropriate
+        if self.ConvertUnits==False:
+            value -= 273.15 # K to C
+        else:
+            value = self.converter.K_toF(value)
+            
+        return value
+    
     def Tdew_PTdTw(self,p,Td,Tw):
         """
         get dew point temperature as a function of pressure, Td, and Tw
