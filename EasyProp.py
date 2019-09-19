@@ -167,6 +167,31 @@ class HumidAir(object):
         
         return value # no units; no need to convert
     
+    def R_PTW(self,p,Td,W):
+        """
+        get relative humidity as a function of pressure, Td, and W
+        
+        input:
+            P - pressure.  SI units: kPa, USCS units: psia
+            Td - dry bulb temp [C / F]
+            W - humidity ratio (no units)
+            
+        output:
+            R - relative humidity (no units)
+        
+        """
+        
+        if self.ConvertUnits==False:
+            p*=1000. # from kPa to Pa
+            Td+=273.15 # from C to K
+        else:
+            p = self.converter.P_toSI(p)*1000 # from psi to kPa to Pa
+            Td = self.converter.F_toK(Td) 
+            
+        value = HAPropsSI('R','P',p,'Tdb',Td,'W',W)
+        
+        return value
+    
     def Tdew_PTdTw(self,p,Td,Tw):
         """
         get dew point temperature as a function of pressure, Td, and Tw
