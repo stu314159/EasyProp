@@ -31,7 +31,7 @@ end
 %% Establish working fluid and unit system
 fluid = 'Water';
 unitSystem = 'SI';
-myFluid = py.EasyProp.EasyProp(fluid,unitSystem);
+myFluid = py.EasyProp.simpleFluid(fluid,unitSystem);
 
 %% Problem parameters
 numSp = 4;

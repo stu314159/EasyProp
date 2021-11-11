@@ -57,7 +57,7 @@ eta_lpt = 0.92 # low pressure turbine isentropic efficiency
 m_dot_p = 113.5e6 # lbm/hr, primary coolant system flow rate
 
 # declare fluid property arrays
-h = np.zeros((numStatePoints,),dtype=np.float)
+h = np.zeros((numStatePoints,),dtype=np.float64)
 h_s = np.zeros_like(h);
 x = np.zeros_like(h);
 s = np.zeros_like(h);

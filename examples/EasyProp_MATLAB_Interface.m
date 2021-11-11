@@ -11,7 +11,7 @@ clear
 clc
 close 'all'
 
-EasyProp_path=' '; % <-- enter relative or absolute path to folder containing EasyProp.py
+EasyProp_path='..'; % <-- enter relative or absolute path to folder containing EasyProp.py
 if count(py.sys.path,EasyProp_path) == 0  % <-- see if desired directory is on path
     insert(py.sys.path,int32(0),EasyProp_path); %<-- if not; add it.
 end
