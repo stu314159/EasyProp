@@ -24,7 +24,7 @@ class PropertyConverter(object):
         self.c_fact = self.s_fact; # why not have two names?
         self.rho_fact = 16.0185; # 1 lbm/ft^3 = 16.0185 kg/m^3
         
-        self.mu_fact = 0.020885434224573; # 1 N-s/m^2 = 0.02088... lbf-s/ft^2
+        self.mu_fact = 0.671969; # 1 N-s/m^2 = 0.02088... lbm/ft-s
         
     def mu_toUS(self,mu_SI):
         """
@@ -101,6 +101,22 @@ class PropertyConverter(object):
         
         """
         return kg*2.20462
+    
+    def sigma_toUS(self,sigSI):
+        """
+        
+
+        Parameters
+        ----------
+        sigSI : float
+            surface tension of fluid in SI units.
+
+        Returns
+        -------
+        float, surface tension of fluid in USCS units
+
+        """
+        return sigSI*0.737562
     
     def lbm_toKG(self,lbm):
         """
@@ -1235,6 +1251,8 @@ class EasyProp(object):
     def mu_pT(self,p,T):
         """
         return the viscosity (Pa-s, kg/m-s  or lbm/ft-s)
+    
+        (need to fix a bug in the units conversion. works for SI)
         """
         
         if self.ConvertUnits==False:
@@ -1250,6 +1268,33 @@ class EasyProp(object):
             value = self.converter.mu_toUS(value)
             
         return value
+    
+    def sigma_xT(self,x,T):
+        """
+
+        Parameters
+        ----------
+        p : float, quality
+            
+        T : float, temperature
+
+        Returns
+        -------
+        Surface tension.  Units: N/m or lbf/ft
+
+        """
+        if self.ConvertUnits==False:
+            T+=273.15 # from C to K
+        else:
+            T = self.converter.F_toK(T);
+        
+        value  =CP.PropsSI('I','Q',x,'T',T,self.fluidName)
+        
+        if self.ConvertUnits==True:
+            value = self.converter.sigma_toUS(value)
+            
+        return value
+        
     
     def Cp_pT(self,p,T ):
         """
@@ -1290,6 +1335,8 @@ class EasyProp(object):
     def k_pT(self,p,T):
         """
         return thermal conductivity (kW/m-K) or BTU/ft-sec-R
+        
+        (issue with mu and USCS units shows up here too)
         """
                    
         value = (self.Cp_pT(p,T)*self.mu_pT(p,T))/self.Prandtl_pT(p,T)
