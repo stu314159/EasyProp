@@ -1,5 +1,6 @@
 #EasyProp.py
 """
+version: 0.10.0
 Implementation Module for EasyProp.
 
 EasyProp is another wrapper for the CoolProp Python Wrapper.
