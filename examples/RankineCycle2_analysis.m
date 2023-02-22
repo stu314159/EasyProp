@@ -56,8 +56,8 @@ close 'all'
 %% Put EasyProp on Python path
 % put location of EasyProp.py module on the python search path
 % here, I assume that EasyProp.py is up one level in the file system
-if count(py.sys.path,'') == 0  % <-- see if desired directory is on path
-    insert(py.sys.path,int32(0),''); %<-- if not; add it.
+if count(py.sys.path,'..') == 0  % <-- see if desired directory is on path
+    insert(py.sys.path,int32(0),'..'); %<-- if not; add it.
 end
 
 %% Establish working fluid and unit system
